@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home is calling</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap" rel="stylesheet">
+  <style>
+
+:root{
+  --day-bg-start:#87CEEB;
+  --day-bg-end:#4682B4;
+  --night-bg-start:#000033;
+  --night-bg-end:#000000;
+  --morning-bg-start:#FFD700;
+  --morning-bg-end:#FF6347;
+  --evening-bg-start:#FF6347;
+  --evening-bg-end:#4B0082;
+  --glow:#00ffe6;
+  --yellow:#ffe8a3;
+  --panel:rgba(10,48,70,.48);
+  --panel-dark:rgba(0,35,55,.52);
+  --line:rgba(255,255,255,.22);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%}
+
+body{
+  min-height:100vh;
+  overflow:hidden;
+  font-family:'Montserrat',sans-serif;
+  color:#fff;
+  text-align:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,var(--day-bg-start),var(--day-bg-end));
+  transition:background-image 1.5s ease-in-out;
+}
+
+.day{background-image:linear-gradient(135deg,var(--day-bg-start),var(--day-bg-end))}
+.night{background-image:linear-gradient(135deg,var(--night-bg-start),var(--night-bg-end))}
+.morning{background-image:linear-gradient(135deg,var(--morning-bg-start),var(--morning-bg-end))}
+.evening{background-image:linear-gradient(135deg,var(--evening-bg-start),var(--evening-bg-end))}
+
+.container{
+  width:min(96vw,1600px);
+  height:min(94vh,calc(96vw * 9 / 16));
+  aspect-ratio:16/9;
+  padding:clamp(18px,1.8vw,30px);
+  border-radius:22px;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(12px);
+  box-shadow:0 12px 35px rgba(0,0,0,.22);
+  display:flex;
+  overflow:hidden;
+}
+
+.journey-grid{
+  width:100%;
+  height:100%;
+  min-height:0;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(18px,2vw,34px);
+}
+
+.vacation-panel,
+.academic-panel{
+  min-width:0;
+  min-height:0;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+}
+
+.vacation-panel{
+  padding-right:clamp(18px,1.8vw,30px);
+  border-right:2px solid rgba(0,0,0,.72);
+}
+
+.academic-panel{
+  padding-left:clamp(2px,.2vw,4px);
+}
+
+/* ---------- LEFT SIDE ---------- */
+#main-heading{
+  margin:0;
+  font-size:clamp(2.2rem,3.2vw,3.65rem);
+  line-height:1.05;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--yellow);
+  text-shadow:0 0 12px #ffdd66,0 0 25px #ffaa00;
+  white-space:nowrap;
+}
+
+#sky-icon{
+  margin:clamp(12px,1.2vh,20px) 0 clamp(12px,1.4vh,22px);
+  font-size:clamp(2.4rem,3.2vw,3.5rem);
+  line-height:1;
+  animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-5px)}
+}
+
+#countdown,
+#academic-countdown{
+  width:100%;
+  min-height:clamp(76px,9vh,112px);
+  padding:clamp(12px,1.1vw,18px);
+  border-radius:17px;
+  background:var(--panel-dark);
+  box-shadow:0 0 20px rgba(255,255,255,.10),inset 0 0 15px rgba(0,0,0,.10);
+  display:flex;
+  align-items:center;
+  justify-content:space-evenly;
+}
+
+#countdown{
+  font-family:'Courier New',monospace;
+  text-shadow:0 0 12px var(--glow);
+}
+
+.countdown-segment,
+.academic-segment{
+  flex:1 1 0;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+
+.countdown-segment:not(:last-child)::after,
+.academic-segment:not(:last-child)::after{
+  content:"";
+  position:absolute;
+  right:0;
+  top:15%;
+  height:70%;
+  width:1px;
+  background:rgba(255,255,255,.28);
+}
+
+.countdown-segment .value,
+.academic-segment .value{
+  font-size:clamp(1.45rem,2.25vw,2.45rem);
+  line-height:1;
+  font-weight:700;
+}
+
+.countdown-segment .label,
+.academic-segment .label{
+  margin-top:7px;
+  font-size:clamp(.54rem,.72vw,.78rem);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  opacity:.78;
+}
+
+.progress-wrapper,
+.academic-progress-wrapper{
+  width:100%;
+  margin-top:clamp(14px,1.6vh,22px);
+}
+
+.labels,
+.academic-labels{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:7px;
+  font-size:clamp(.78rem,1.05vw,1.08rem);
+  font-weight:700;
+}
+
+#progress-container,
+#academic-progress-container{
+  width:100%;
+  height:clamp(18px,2.3vh,29px);
+  position:relative;
+  border-radius:999px;
+  overflow:visible;
+  background:rgba(255,255,255,.16);
+  box-shadow:inset 0 0 8px rgba(0,0,0,.45);
+}
+
+#progress-bar,
+#academic-progress-bar{
+  height:100%;
+  width:0%;
+  border-radius:999px;
+  transition:width .25s linear;
+}
+
+#progress-bar{
+  background:linear-gradient(90deg,#f9d423,#ff4e50);
+  box-shadow:0 0 10px rgba(255,255,255,.5);
+}
+
+#academic-progress-bar{
+  background:linear-gradient(90deg,#00ffe6,#4df06d,#f9d423);
+  box-shadow:0 0 12px rgba(0,255,230,.55);
+}
+
+#ship,
+#academic-cap{
+  position:absolute;
+  top:50%;
+  z-index:3;
+  line-height:1;
+  font-size:clamp(1.35rem,2.1vw,2rem);
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.55));
+  transition:left .25s linear;
+}
+
+#ship{transform:translate(-50%,-50%) scaleX(-1)}
+#academic-cap{transform:translate(-50%,-50%)}
+
+#percentage,
+#academic-percentage{
+  margin-top:clamp(10px,1.2vh,17px);
+  font-size:clamp(1.2rem,1.8vw,1.8rem);
+  font-weight:700;
+  text-shadow:0 0 10px rgba(0,255,230,.7);
+}
+
+/* ---------- RIGHT SIDE TOP CARD ---------- */
+.academic-top{
+  flex:1 1 auto;
+  min-height:0;
+  padding:clamp(10px,1.1vw,18px);
+  border-radius:18px;
+  background:transparent;
+  border:1px solid transparent;
+}
+
+.academic-title{
+  margin:0;
+  font-size:clamp(1.55rem,2.45vw,2.45rem);
+  line-height:1.1;
+  font-weight:700;
+  letter-spacing:1.5px;
+  color:#eaffff;
+  text-shadow:0 0 10px var(--glow);
+  white-space:nowrap;
+}
+
+.academic-subtitle{
+  margin:clamp(7px,1vh,12px) 0 clamp(12px,1.5vh,19px);
+  font-size:clamp(.75rem,.95vw,1rem);
+  opacity:.8;
+}
+
+#academic-countdown{
+  font-family:'Courier New',monospace;
+  text-shadow:0 0 10px var(--glow);
+}
+
+.academic-segment .value{
+  font-size:clamp(1.5rem,2.25vw,2.45rem);
+}
+
+.academic-segment .label{
+  font-size:clamp(.54rem,.72vw,.78rem);
+}
+
+.academic-labels{
+  font-size:clamp(.76rem,.98vw,1rem);
+}
+
+#academic-percentage{
+  text-align:center;
+}
+
+.academic-complete{
+  color:var(--yellow);
+  text-shadow:0 0 15px #ffaa33;
+}
+
+/* ---------- BOTTOM CARDS: EQUAL SIZE ---------- */
+.milestones-card,
+.academic-stats{
+  flex:0 0 auto;
+  width:100%;
+  margin-top:auto;
+}
+
+.milestones-card{
+  padding-top:clamp(10px,1.3vh,18px);
+}
+
+.milestones-title{
+  margin-bottom:clamp(8px,1vh,13px);
+  font-size:clamp(1.1rem,1.65vw,1.75rem);
+  line-height:1.1;
+  font-weight:700;
+  letter-spacing:1px;
+  color:#eaffff;
+  text-shadow:0 0 10px var(--glow);
+}
+
+.milestones-grid,
+.academic-stats{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(8px,1vw,14px);
+}
+
+.milestone-box,
+.academic-stat{
+  min-width:0;
+  min-height:clamp(105px,15vh,145px);
+  padding:clamp(9px,.9vw,15px) clamp(7px,.8vw,12px);
+  border-radius:15px;
+  background:rgba(10,50,72,.40);
+  border:1px solid rgba(255,255,255,.06);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.milestone-icon{
+  font-size:clamp(1.35rem,1.8vw,2rem);
+  margin-bottom:4px;
+}
+
+.milestone-name{
+  font-size:clamp(.66rem,.82vw,.9rem);
+  font-weight:700;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+  opacity:.92;
+}
+
+.milestone-value{
+  margin-top:6px;
+  font-family:'Courier New',monospace;
+  font-size:clamp(1.45rem,2.25vw,2.35rem);
+  line-height:1;
+  font-weight:700;
+  color:#eaffff;
+  text-shadow:0 0 12px var(--glow);
+}
+
+.milestone-detail{
+  margin-top:7px;
+  font-size:clamp(.55rem,.68vw,.72rem);
+  line-height:1.2;
+  opacity:.7;
+}
+
+.working-note{
+  display:none;
+}
+
+.academic-stats{
+  margin-top:clamp(10px,1.3vh,18px);
+}
+
+.academic-stat{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);
+}
+
+.academic-stat .number{
+  display:block;
+  font-size:clamp(1.7rem,2.65vw,2.7rem);
+  line-height:1;
+  font-weight:700;
+  color:var(--yellow);
+}
+
+.academic-stat .text{
+  margin-top:9px;
+  font-size:clamp(.58rem,.75vw,.76rem);
+  text-transform:uppercase;
+  letter-spacing:.7px;
+  opacity:.75;
+}
+
+/* Completion state */
+.countdown-complete .countdown-segment{display:none!important}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:999px){
+  body{
+    overflow:auto;
+    padding:15px;
+  }
+
+  .container{
+    width:100%;
+    height:auto;
+    min-height:0;
+    aspect-ratio:auto;
+  }
+
+  .journey-grid{
+    grid-template-columns:1fr;
+    height:auto;
+  }
+
+  .vacation-panel{
+    padding-right:0;
+    padding-bottom:22px;
+    border-right:0;
+    border-bottom:2px solid rgba(0,0,0,.7);
+  }
+
+  .academic-panel{
+    padding-left:0;
+    padding-top:22px;
+  }
+
+  .academic-top{padding:8px}
+  .academic-stats,.milestones-grid{grid-template-columns:repeat(3,1fr)}
+}
+
+@media(max-width:600px){
+  #main-heading,.academic-title{white-space:normal}
+  .milestones-grid,.academic-stats{grid-template-columns:1fr}
+  .milestone-box,.academic-stat{min-height:95px}
+}
+
+  
+/* ===== FINAL ALIGNMENT / EQUAL-SIZE DASHBOARD ===== */
+@media (min-width:1000px){
+  .container{
+    padding:16px 18px;
+  }
+
+  .journey-grid{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:18px;
+  }
+
+  /* Keep both halves on the same horizontal rhythm. */
+  .vacation-panel{
+    padding-right:18px;
+    display:grid;
+    grid-template-rows:58px 48px 100px 86px 1fr;
+    align-content:stretch;
+  }
+
+  .academic-panel{
+    padding-left:0;
+    display:grid;
+    grid-template-rows:1fr 124px;
+    gap:12px;
+  }
+
+  /* Left heading/icon occupy the same vertical space as the right
+     title + subtitle, so the two countdown/progress sections line up. */
+  #main-heading{
+    margin:0;
+    align-self:center;
+  }
+
+  #sky-icon{
+    margin:0;
+    align-self:center;
+    justify-self:center;
+  }
+
+  #countdown,
+  #academic-countdown{
+    width:100%;
+    height:100px;
+    min-height:100px;
+  }
+#academic-countdown{
+  margin-top: 25px;
+}
+  .progress-wrapper,
+  .academic-progress-wrapper{
+    width:100%;
+    margin:0;
+    align-self:start;
+  }
+ .academic-progress-wrapper{
+  margin-top: 25px;
+ }
+  .labels,
+  .academic-labels{
+    width:100%;
+    height:25px;
+    margin:0 0 5px;
+  }
+
+  #progress-container,
+  #academic-progress-container{
+    width:100%;
+    height:22px;
+    margin:0;
+  }
+
+
+  #percentage{
+     margin-top:8px;
+    line-height:1;
+  }
+  #academic-percentage{
+    margin-top:33px;
+    line-height:1;
+  }
+
+  /* Right upper card: title + subtitle + countdown + progress use
+     fixed shared rows, keeping the progress bars side-by-side aligned. */
+  .academic-top{
+    min-height:0;
+    padding:8px 2px 0;
+    display:grid;
+    grid-template-rows:40px 30px 100px 86px;
+    align-content:start;
+  }
+
+  .academic-title{
+    margin:0;
+    align-self:center;
+  }
+
+  .academic-subtitle{
+    margin:0;
+    align-self:center;
+  }
+
+  .academic-top #academic-countdown{
+    align-self:start;
+  }
+
+  .academic-top .academic-progress-wrapper{
+    align-self:start;
+  }
+
+  /* Bottom cards: every card gets exactly the same width and height. */
+  .milestones-card{
+    width:100%;
+    margin:0;
+    padding:0;
+    align-self:end;
+  }
+
+  .milestones-title{
+    height:30px;
+    margin:0 0 8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .milestones-grid,
+  .academic-stats{
+    width:100%;
+    height:112px;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:12px;
+  }
+
+  .milestone-box,
+  .academic-stat{
+    width:100%;
+    height:112px;
+    min-height:112px;
+    margin:0;
+    padding:8px 10px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .academic-stats{
+    margin:0;
+    align-self:end;
+  }
+
+  /* Match the three left cards and three right cards exactly. */
+  .milestone-icon{height:25px; line-height:25px; margin:0 0 3px;}
+  .milestone-name{height:19px; line-height:19px;}
+  .milestone-value{height:36px; line-height:36px; margin:3px 0 0;}
+  .milestone-detail{height:18px; line-height:18px; margin:2px 0 0;}
+
+  .academic-stat .number{height:43px; line-height:43px;}
+  .academic-stat .text{height:18px; line-height:18px; margin-top:5px;}
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="journey-grid">
+
+      <!-- LEFT: HOME COUNTDOWN -->
+      <section class="vacation-panel">
+        <h1 id="main-heading">Home is calling</h1>
+        <div id="sky-icon">🌞</div>
+
+        <div id="countdown">
+          <div class="countdown-segment">
+            <span class="value" id="days-value">0</span>
+            <span class="label">Days</span>
+          </div>
+          <div class="countdown-segment">
+            <span class="value" id="hours-value">0</span>
+            <span class="label">Hours</span>
+          </div>
+          <div class="countdown-segment">
+            <span class="value" id="minutes-value">0</span>
+            <span class="label">Minutes</span>
+          </div>
+          <div class="countdown-segment">
+            <span class="value" id="seconds-value">0</span>
+            <span class="label">Seconds</span>
+          </div>
+        </div>
+
+        <div class="progress-wrapper">
+          <div class="labels">
+            <span id="start-label">ACADEMY</span>
+            <span>Home</span>
+          </div>
+          <div id="progress-container">
+            <div id="progress-bar"></div>
+            <div id="ship">🚢</div>
+          </div>
+        </div>
+
+        <div id="percentage">0.00%</div>
+
+        <!-- Academic milestones stay inside the LEFT column -->
+        <div class="milestones-card">
+          <div class="milestones-title">⚓ ACADEMIC MILESTONES</div>
+          <div class="milestones-grid">
+            <div class="milestone-box">
+              <div class="milestone-icon">💼</div>
+              <div class="milestone-name">Working Days</div>
+              <div class="milestone-value" id="working-days-left">0</div>
+              <div class="milestone-detail">Until P.L. · Fri/Sat excluded</div>
+            </div>
+
+            <div class="milestone-box">
+              <div class="milestone-icon">🚌</div>
+              <div class="milestone-name">Excursion</div>
+              <div class="milestone-value" id="excursion-days-left">0</div>
+              <div class="milestone-detail">05 September 2026</div>
+            </div>
+
+            <div class="milestone-box">
+              <div class="milestone-icon">📝</div>
+              <div class="milestone-name">Semester Final</div>
+              <div class="milestone-value" id="exam-days-left">0</div>
+              <div class="milestone-detail">01 November 2026</div>
+            </div>
+          </div>
+          <div class="working-note">Working days exclude Friday/Saturday and the 05–19 September excursion/vacation, ending when P.L. begins on 14 October.</div>
+        </div>
+      </section>
+
+      <!-- RIGHT: ACADEMIC JOURNEY -->
+      <section class="academic-panel">
+        <div class="academic-top">
+          <div class="academic-title">🎓 ACADEMIC JOURNEY</div>
+          <div class="academic-subtitle">09 February 2025 → 02 December 2026</div>
+
+          <div id="academic-countdown">
+            <div class="academic-segment">
+              <span class="value" id="academic-days">0</span>
+              <span class="label">Days</span>
+            </div>
+            <div class="academic-segment">
+              <span class="value" id="academic-hours">0</span>
+              <span class="label">Hours</span>
+            </div>
+            <div class="academic-segment">
+              <span class="value" id="academic-minutes">0</span>
+              <span class="label">Minutes</span>
+            </div>
+            <div class="academic-segment">
+              <span class="value" id="academic-seconds">0</span>
+              <span class="label">Seconds</span>
+            </div>
+          </div>
+
+          <div class="academic-progress-wrapper">
+            <div class="academic-labels">
+              <span>🎓 JOINED</span>
+              <span>PASSING OUT 🏁</span>
+            </div>
+
+            <div id="academic-progress-container">
+              <div id="academic-progress-bar"></div>
+              <div id="academic-cap">🎓</div>
+            </div>
+
+            <div id="academic-percentage">0.00%</div>
+          </div>
+        </div>
+
+        <!-- Bottom right: three equal cards -->
+        <div class="academic-stats">
+          <div class="academic-stat">
+            <span class="number" id="academic-total">0</span>
+            <span class="text">Total Days</span>
+          </div>
+          <div class="academic-stat">
+            <span class="number" id="academic-completed">0</span>
+            <span class="text">Completed</span>
+          </div>
+          <div class="academic-stat">
+            <span class="number" id="academic-remaining">0</span>
+            <span class="text">Remaining</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+<script>
+     // Start and End Dates
+     // NOTE: The current date is Oct 28, 2025 6:54 PM. The target date below is in the future.
+     const startDate = new Date("2026-07-11T12:00:00");
+     const targetDate = new Date("2026-09-05T07:00:00");
+     // Get all necessary elements
+     const body = document.body;
+     const skyIcon = document.getElementById('sky-icon');
+     const countdownDiv = document.getElementById('countdown');
+     const mainHeading = document.getElementById('main-heading');
+     const startLabel = document.getElementById('start-label');
+     const progressBar = document.getElementById('progress-bar');
+     const percentageDiv = document.getElementById('percentage');
+     const ship = document.getElementById('ship');
+     const progressContainer = document.getElementById('progress-container');
+     // Function to handle the Completed State
+     const handleJourneyComplete = () => {
+         // 1. Update text content
+         mainHeading.textContent = "JOURNEY COMPLETED";
+         startLabel.textContent = "WELCOME HOME!";
+         skyIcon.textContent = "🏁";
+         // 2. Hide the countdown segments
+         countdownDiv.classList.add('countdown-complete');
+         // 3. Finalize progress bar
+         progressBar.style.width = '100%';
+         percentageDiv.textContent = '100.00%';
+
+         // Calculate the ship's final position (at the very end of the bar)
+         const containerWidth = progressContainer.clientWidth;
+         const shipWidth = ship.offsetWidth;
+         ship.style.left = `${containerWidth - shipWidth}px`;
+         // Stop the animation loop
+         cancelAnimationFrame(animationFrameId);
+     }
+
+
+     const setTimeOfDayBackground = () => {
+       const now = new Date();
+       const hour = now.getHours();
+       body.classList.remove('morning', 'day', 'evening', 'night');
+       // Only set time-of-day background if the journey is not complete
+       if (now < targetDate) {
+           if (hour >= 5 && hour < 10) {
+             body.classList.add('morning');
+             skyIcon.textContent = "🌅";
+           } else if (hour >= 10 && hour < 17) {
+             body.classList.add('day');
+             skyIcon.textContent = "🌞";
+           } else if (hour >= 17 && hour < 21) {
+             body.classList.add('evening');
+             skyIcon.textContent = "🌇";
+           } else {
+             body.classList.add('night');
+             skyIcon.textContent = "🌙";
+           }
+       } else {
+            // Ensure it stays on a pleasing background after completion, e.g., 'day'
+            body.classList.add('day');
+       }
+     };
+     const updateCountdown = (targetDate,startDate) => {
+       const now = new Date();
+       const totalDuration = targetDate - startDate;
+       const elapsedTime = now - startDate;
+       const remainingTime = targetDate - now;
+       if (remainingTime <= 0) {
+         handleJourneyComplete();
+         return;
+       }
+       const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+       const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+       const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+       const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+       document.getElementById('days-value').textContent = days;
+       document.getElementById('hours-value').textContent = hours;
+       document.getElementById('minutes-value').textContent = minutes;
+       document.getElementById('seconds-value').textContent = seconds;
+       const progress = elapsedTime / totalDuration;
+       const percentage = (progress * 100).toFixed(2);
+       progressBar.style.width = `${percentage}%`;
+       percentageDiv.textContent = `${percentage}%`;
+       const containerWidth = progressContainer.clientWidth;
+       const shipWidth = ship.offsetWidth;
+       // Calculate position relative to the start of the container
+       const shipPosition = (containerWidth * progress) - (shipWidth / 2);
+       // Clamp position to stay within the bounds of the container
+       const clampedPosition = Math.max(0, Math.min(shipPosition, containerWidth - shipWidth));
+       ship.style.left = `${clampedPosition}px`;
+     };
+
+     let animationFrameId;
+     const animate = () => {
+       updateCountdown(targetDate,startDate);
+       animationFrameId = requestAnimationFrame(animate);
+     };
+     setTimeOfDayBackground();
+     animate();
+     // Only set up interval for background if journey isn't complete (though updateCountdown handles the text/icon)
+     if (new Date() < targetDate) {
+         setInterval(setTimeOfDayBackground, 60000);
+     }
+     // ===== ACADEMIC JOURNEY COUNTDOWN =====
+     const academicStartDate = new Date("2025-02-09T00:00:00");
+     const academicTargetDate = new Date("2026-12-02T00:00:00");
+     const academicDays = document.getElementById("academic-days");
+     const academicHours = document.getElementById("academic-hours");
+     const academicMinutes = document.getElementById("academic-minutes");
+     const academicSeconds = document.getElementById("academic-seconds");
+     const academicProgressBar = document.getElementById("academic-progress-bar");
+     const academicCap = document.getElementById("academic-cap");
+     const academicPercentage = document.getElementById("academic-percentage");
+     const academicTotal = document.getElementById("academic-total");
+     const academicCompleted = document.getElementById("academic-completed");
+     const academicRemaining = document.getElementById("academic-remaining");
+     const academicTitle = document.querySelector(".academic-title");
+     const updateAcademicJourney = () => {
+       const now = new Date();
+       const totalDuration = academicTargetDate - academicStartDate;
+       const elapsed = now - academicStartDate;
+       const remaining = academicTargetDate - now;
+       const totalDays = Math.ceil(totalDuration / (1000 * 60 * 60 * 24));
+       let completedDays = Math.floor(elapsed / (1000 * 60 * 60 * 24));
+       completedDays = Math.max(0, Math.min(completedDays, totalDays));
+       academicTotal.textContent = totalDays;
+       academicCompleted.textContent = completedDays;
+       academicRemaining.textContent = Math.max(0, totalDays - completedDays);
+       if (remaining <= 0) {
+         academicDays.textContent = "0";
+         academicHours.textContent = "0";
+         academicMinutes.textContent = "0";
+         academicSeconds.textContent = "0";
+         academicProgressBar.style.width = "100%";
+         academicCap.style.left = "100%";
+         academicPercentage.textContent = "100.00%";
+         academicTitle.textContent = "🎓 ACADEMIC JOURNEY COMPLETED!";
+         academicPercentage.classList.add("academic-complete");
+         return;
+       }
+       const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
+       const hours = Math.floor((remaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+       const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+       const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+       academicDays.textContent = days;
+       academicHours.textContent = hours;
+       academicMinutes.textContent = minutes;
+       academicSeconds.textContent = seconds;
+       const progress = Math.max(0, Math.min(1, elapsed / totalDuration));
+       const percentage = (progress * 100).toFixed(2);
+       academicProgressBar.style.width = `${percentage}%`;
+       academicPercentage.textContent = `${percentage}%`;
+       // Keep the graduation cap inside the progress bar.
+       academicCap.style.left = `${Math.max(1, Math.min(99, progress * 100))}%`;
+     };
+     updateAcademicJourney();
+     setInterval(updateAcademicJourney, 1000);
+     // ===== ACADEMIC MILESTONES =====
+     const PLStart = new Date("2026-10-14T00:00:00");
+     const excursionDate = new Date("2026-09-05T00:00:00");
+     const vacationEndDate = new Date("2026-09-19T23:59:59");
+     const examStartDate = new Date("2026-11-01T00:00:00");
+     function isWeeklyHoliday(d) {
+       return d.getDay() === 5 || d.getDay() === 6; // Friday/Saturday
+     }
+     function isExcursionVacation(d) {
+       return d >= excursionDate && d <= vacationEndDate;
+     }
+     function workingDaysRemaining() {
+       const now = new Date();
+       if (now >= PLStart) return 0;
+       let d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+       let count = 0;
+       while (d < PLStart) {
+         if (!isWeeklyHoliday(d) && !isExcursionVacation(d)) count++;
+         d.setDate(d.getDate() + 1);
+       }
+       return count;
+     }
+     function calendarDaysUntil(target) {
+       const now = new Date();
+       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+       const targetDay = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+       return Math.max(0, Math.ceil((targetDay - today) / 86400000));
+     }
+     function updateMilestones() {
+       document.getElementById("working-days-left").textContent = workingDaysRemaining();
+       document.getElementById("excursion-days-left").textContent = calendarDaysUntil(excursionDate);
+       document.getElementById("exam-days-left").textContent = calendarDaysUntil(examStartDate);
+     }
+     updateMilestones();
+     setInterval(updateMilestones, 60000);
+   </script>
+ 
+</body>
+</html>

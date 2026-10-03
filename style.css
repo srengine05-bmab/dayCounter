@@ -1,0 +1,421 @@
+:root {
+  --bg-dark: rgba(0, 0, 0, 0.25);
+  --panel-border: rgba(255, 255, 255, 0.12);
+  --soft-white: rgba(255, 255, 255, 0.8);
+  --soft-text: rgba(255, 255, 255, 0.7);
+  --glow: rgba(0, 255, 230, 0.8);
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --track-bg: rgba(0, 0, 0, 0.38);
+  --countdown-glow: rgba(0, 255, 230, 0.6);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  height: 100svh;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff;
+  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 40%, #00f2fe 100%);
+  transition: background 1s ease;
+  position: relative;
+}
+
+body.widget-mode {
+  background: transparent !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.app-shell {
+  width: min(100%, 64rem);
+  max-height: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 1.25rem 1.1rem;
+  border: 1px solid var(--panel-border);
+  border-radius: 1.8rem;
+  background: var(--bg-dark);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transform: scale(var(--dashboard-scale, 1));
+  transform-origin: center center;
+  transition: transform 180ms ease-out;
+}
+
+body.widget-mode .app-shell {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  max-width: 42rem;
+  padding: 0;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.time-icon {
+  font-size: clamp(3rem, 6vw, 5rem);
+  margin-bottom: 0.6rem;
+  line-height: 1;
+}
+
+.animate-bounce-slow {
+  animation: bounce 3s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.main-title,
+.widget-title {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 0 15px rgba(0, 255, 230, 0.8);
+}
+
+.main-title {
+  font-size: clamp(1.8rem, 4vw, 3.5rem);
+  background: linear-gradient(90deg, #ffffff 0%, #eaffff 48%, #ffffff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  margin: 0.9rem 0 0;
+  color: var(--soft-text);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+.widget-title {
+  display: none;
+  font-size: clamp(1.5rem, 2.8vw, 2.5rem);
+  margin: 0 0 1.5rem;
+  text-align: center;
+}
+
+body.widget-mode .widget-title {
+  display: block;
+}
+
+.countdown-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  padding: 1rem 0.75rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.25rem;
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 25px rgba(0, 255, 230, 0.15);
+}
+
+body.widget-mode .countdown-container {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.time-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex: 1;
+  padding: 0.5rem 0.25rem;
+}
+
+.time-box + .time-box {
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.time-value {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 700;
+  font-family: "Courier New", Courier, monospace;
+  letter-spacing: -0.06em;
+  color: #eaffff;
+  text-shadow: 0 0 12px var(--glow);
+}
+
+.time-label {
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 700;
+}
+
+.progress-wrap {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.progress-track {
+  position: relative;
+  width: 100%;
+  height: 2.3rem;
+  background: var(--track-bg);
+  border-radius: 999px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #00ffe6 0%, #4df06d 50%, #f9d423 100%);
+  box-shadow: 0 0 20px rgba(0, 255, 230, 0.7);
+  transition: width 1s ease-out;
+}
+
+.progress-emoji {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  transform: translate(-50%, -50%);
+  transition: left 1s ease-out;
+  z-index: 2;
+}
+
+.emoji-shell {
+  position: relative;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.4));
+}
+
+.emoji-badge {
+  position: absolute;
+  top: -0.55rem;
+  right: -0.35rem;
+  font-size: clamp(1rem, 1.7vw, 1.7rem);
+  transform: rotate(12deg);
+}
+
+.progress-text-wrap {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.progress-text {
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
+  font-weight: 700;
+  font-family: "Courier New", Courier, monospace;
+  letter-spacing: -0.04em;
+  color: #eaffff;
+  text-shadow: 0 0 12px var(--glow);
+}
+
+.progress-text.complete {
+  color: #f9d423;
+  text-shadow: 0 0 15px rgba(255, 170, 51, 1);
+}
+
+.stats-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+  padding: 0.65rem 0.45rem;
+  border-radius: 1.2rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 0 15px rgba(0, 255, 230, 0.15);
+  text-align: center;
+  transition: background 0.2s ease;
+}
+
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.stat-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-bottom: 0.6rem;
+  color: #00ffe6;
+  opacity: 0.9;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.3;
+}
+
+.stat-value {
+  margin-top: 0.5rem;
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
+  font-weight: 700;
+  font-family: "Courier New", Courier, monospace;
+  color: #eaffff;
+  text-shadow: 0 0 10px rgba(0, 255, 230, 0.6);
+}
+
+.stat-caption {
+  margin-top: 0.4rem;
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+}
+
+.footer-note {
+  max-width: 44rem;
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.6;
+}
+
+body.widget-mode .hide-in-widget {
+  display: none !important;
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 0.5rem;
+  }
+
+  .app-shell {
+    padding: 0.8rem 0.65rem;
+    border-radius: 1.2rem;
+  }
+
+  .header {
+    margin-bottom: 0.8rem;
+  }
+
+  .subtitle {
+    letter-spacing: 0.04em;
+    font-size: 0.85rem;
+  }
+
+  .countdown-container {
+    padding: 0.75rem 0.35rem;
+    margin-bottom: 1rem;
+  }
+
+  .time-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+  }
+
+  .progress-labels {
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+  }
+
+  .stats-grid {
+    gap: 0.5rem;
+  }
+
+  .stat-card {
+    min-height: 6.8rem;
+    padding: 0.5rem 0.25rem;
+  }
+
+  .footer-note {
+    display: none;
+    font-size: 0.6rem;
+    line-height: 1.3;
+  }
+}
+
+@media (max-width: 420px) {
+  .countdown-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 0.5rem;
+  }
+
+  .time-box + .time-box {
+    border-left: none;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .stat-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .stat-label {
+    font-size: 0.52rem;
+    letter-spacing: 0.06em;
+  }
+
+  .stat-value {
+    margin-top: 0.25rem;
+    font-size: 1.35rem;
+  }
+
+  .stat-caption {
+    margin-top: 0.2rem;
+    font-size: 0.5rem;
+    line-height: 1.2;
+  }
+}
+

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Academic Journey Countdown</title>
+    <meta name="description" content="A countdown timer and milestone tracker for your academic journey." />
+    <meta name="theme-color" content="#00F2FE" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Academic" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body id="body">
+    <button id="install-btn" class="install-btn hidden" type="button" aria-label="Install app">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" x2="12" y1="15" y2="3"></line>
+      </svg>
+      <span>Install App</span>
+    </button>
+
+    <div id="main-container" class="app-shell">
+      <div class="header hide-in-widget">
+        <div id="time-icon" class="time-icon animate-bounce-slow">🌞</div>
+        <h1 id="main-title" class="main-title">Academic Journey</h1>
+        <p class="subtitle">09 February 2025 → 02 December 2026</p>
+      </div>
+
+      <h1 id="widget-title" class="widget-title">Academic Journey</h1>
+
+      <div id="countdown-container" class="countdown-container">
+        <div class="time-box">
+          <span id="val-days" class="time-value">00</span>
+          <span class="time-label">Days</span>
+        </div>
+        <div class="time-box">
+          <span id="val-hours" class="time-value">00</span>
+          <span class="time-label">Hours</span>
+        </div>
+        <div class="time-box">
+          <span id="val-mins" class="time-value">00</span>
+          <span class="time-label">Minutes</span>
+        </div>
+        <div class="time-box">
+          <span id="val-secs" class="time-value">00</span>
+          <span class="time-label">Seconds</span>
+        </div>
+      </div>
+
+      <div class="progress-wrap hide-in-widget">
+        <div class="progress-labels">
+          <span>🎓 Joined</span>
+          <span>Passing Out 🏁</span>
+        </div>
+
+        <div class="progress-track">
+          <div id="progress-bar" class="progress-bar"></div>
+
+          <div id="progress-emoji" class="progress-emoji">
+            <div class="emoji-shell">
+              ⛵
+              <span class="emoji-badge">🎓</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-text-wrap">
+          <span id="progress-text" class="progress-text">0.00%</span>
+        </div>
+      </div>
+
+      <div class="stats-grid hide-in-widget">
+        <div class="stat-card">
+          <svg class="stat-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <span class="stat-label">Total Days</span>
+          <span id="stat-total" class="stat-value">0</span>
+          <span class="stat-caption">Duration of Academy</span>
+        </div>
+
+        <div class="stat-card">
+          <svg class="stat-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+          </svg>
+          <span class="stat-label">Completed Days</span>
+          <span id="stat-completed" class="stat-value">0</span>
+          <span class="stat-caption">Journey so far</span>
+        </div>
+
+        <div class="stat-card">
+          <svg class="stat-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+          <span class="stat-label">Working Days</span>
+          <span id="stat-working" class="stat-value">0</span>
+          <span class="stat-caption">Until P.L. (Excl. Fri/Sat)</span>
+        </div>
+      </div>
+
+      <div class="footer-note hide-in-widget">
+        Working days exclude Friday/Saturday and the 05–19 September excursion/vacation, ending when P.L. begins on 14 October.
+        Semester Finals begin 01 November 2026.
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
